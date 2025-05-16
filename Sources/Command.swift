@@ -23,9 +23,6 @@ struct Pbctl: ParsableCommand {
         ]
     )
 
-    @OptionGroup()
-    var options: GlobalOptions
-
     mutating func run() throws {
         let stdinIsTTY = isatty(STDIN_FILENO) != 0
         let stdoutIsTTY = isatty(STDOUT_FILENO) != 0
@@ -34,11 +31,9 @@ struct Pbctl: ParsableCommand {
             throw CleanExit.helpRequest(self)
         } else if !stdinIsTTY && stdoutIsTTY {
             var copyCommand = Copy()
-            copyCommand.options = options
             try copyCommand.run()
         } else {
             var pasteCommand = Paste()
-            pasteCommand.options = options
             try pasteCommand.run()
         }
     }

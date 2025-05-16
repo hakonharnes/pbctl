@@ -5,10 +5,7 @@ struct Copy: ParsableCommand {
         abstract: "Copy data into the pasteboard"
     )
 
-    @OptionGroup()
-    var options: GlobalOptions
-
     mutating func run() throws {
-        print("Copy to \(options.pasteboard)")
+        print("Copy")
     }
 }
