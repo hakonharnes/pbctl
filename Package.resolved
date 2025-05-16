@@ -1,0 +1,33 @@
+{
+  "originHash" : "abe427575f3e04accfd1e1992c59c9383a24eeb95400c7938d160150cbf604b6",
+  "pins" : [
+    {
+      "identity" : "clibmagic",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/hakonharnes/CLibmagic.git",
+      "state" : {
+        "revision" : "d140874680d11ea011c5ca962aaaff09e5e99da0",
+        "version" : "0.7.4"
+      }
+    },
+    {
+      "identity" : "swift-argument-parser",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-argument-parser.git",
+      "state" : {
+        "revision" : "41982a3656a71c768319979febd796c6fd111d5c",
+        "version" : "1.5.0"
+      }
+    },
+    {
+      "identity" : "swift-log",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-log.git",
+      "state" : {
+        "revision" : "3d8596ed08bd13520157f0355e35caed215ffbfa",
+        "version" : "1.6.3"
+      }
+    }
+  ],
+  "version" : 3
+}

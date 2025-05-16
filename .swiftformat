@@ -1,0 +1,5 @@
+--disable unusedArguments
+--maxwidth 120
+--wraparguments beforefirst
+--wrapelements beforefirst
+--allman false
