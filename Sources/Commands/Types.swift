@@ -16,9 +16,11 @@ struct Types: ParsableCommand {
             for (typeIndex, type) in item.types.enumerated() {
                 if typeIndex == 0 {
                     print(String(format: "Item %-3d %@", itemIndex, type.rawValue))
-                } else {
-                    print(String(format: "         %@", type.rawValue))
+                    continue
                 }
+
+                let indent = String(repeating: " ", count: 9)
+                print(String(format: "\(indent)%@", type.rawValue))
             }
         }
     }
