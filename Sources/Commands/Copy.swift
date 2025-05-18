@@ -13,10 +13,14 @@ struct Copy: ParsableCommand {
 
     mutating func run() throws {
         let data = try getData()
-        let pasteboardType = try getPasteboardType(forData: data)
+        var pasteboardType = try getPasteboardType(forData: data)
 
         let pasteboard = NSPasteboard(name: global.pasteboard.name)
         pasteboard.clearContents()
+
+        if pasteboardType.rawValue.contains("plain-text") {
+            pasteboardType = NSPasteboard.PasteboardType.string
+        }
 
         if !pasteboard.setData(data, forType: pasteboardType) {
             throw ValidationError("Failed to copy data to the pasteboard.")
