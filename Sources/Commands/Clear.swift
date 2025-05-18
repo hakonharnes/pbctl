@@ -1,3 +1,4 @@
+import AppKit
 import ArgumentParser
 
 struct Clear: ParsableCommand {
@@ -8,6 +9,7 @@ struct Clear: ParsableCommand {
     @OptionGroup var global: GlobalOptions
 
     mutating func run() throws {
-        print("Paste")
+        let pasteboard = NSPasteboard(name: global.pasteboard.name)
+        pasteboard.clearContents()
     }
 }
