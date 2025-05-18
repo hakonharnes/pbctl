@@ -1,3 +1,4 @@
+import AppKit
 import ArgumentParser
 
 struct Paste: ParsableCommand {
@@ -7,6 +8,15 @@ struct Paste: ParsableCommand {
     @OptionGroup var options: PasteOptions
 
     mutating func run() throws {
-        print("Paste")
+        let pasteboard = NSPasteboard(name: global.pasteboard.name)
+
+        for type in pasteboard.types ?? [] {
+            if let data = pasteboard.data(forType: type) {
+                FileHandle.standardOutput.write(data)
+                return
+            }
+        }
+
+        print("No data found in pasteboard.")
     }
 }
