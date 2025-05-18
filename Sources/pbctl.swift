@@ -17,8 +17,8 @@ struct Pbctl: ParsableCommand {
         abstract: "Command-line interface to the MacOS pasteboard.",
         version: version,
         subcommands: [
-            Copy.self,
             Paste.self,
+            Copy.self,
             Clear.self,
             Types.self,
             Status.self,
