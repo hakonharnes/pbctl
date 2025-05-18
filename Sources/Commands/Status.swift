@@ -3,9 +3,7 @@ import ArgumentParser
 import Foundation
 
 struct Status: ParsableCommand {
-    static let configuration = CommandConfiguration(
-        abstract: "Display pasteboard status"
-    )
+    static let configuration = CommandConfiguration(abstract: "Display pasteboard status.")
 
     @OptionGroup var global: GlobalOptions
 

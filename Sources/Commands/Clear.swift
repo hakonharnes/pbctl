@@ -2,9 +2,7 @@ import AppKit
 import ArgumentParser
 
 struct Clear: ParsableCommand {
-    static let configuration = CommandConfiguration(
-        abstract: "Clear data from the pasteboard"
-    )
+    static let configuration = CommandConfiguration(abstract: "Clear data from the pasteboard.")
 
     @OptionGroup var global: GlobalOptions
 
