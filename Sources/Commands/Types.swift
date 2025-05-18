@@ -5,6 +5,8 @@ struct Types: ParsableCommand {
         abstract: "List pasteboard types"
     )
 
+    @OptionGroup var global: GlobalOptions
+
     mutating func run() throws {
         print("Types")
     }

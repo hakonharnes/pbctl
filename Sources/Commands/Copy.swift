@@ -6,7 +6,7 @@ struct Copy: ParsableCommand {
     )
 
     @OptionGroup var options: CopyOptions
-    @OptionGroup var globalOptions: GlobalOptions
+    @OptionGroup var global: GlobalOptions
 
     mutating func run() throws {
         print("Copy")

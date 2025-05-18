@@ -5,6 +5,8 @@ struct Clear: ParsableCommand {
         abstract: "Clear data from the pasteboard"
     )
 
+    @OptionGroup var global: GlobalOptions
+
     mutating func run() throws {
         print("Paste")
     }
