@@ -8,15 +8,16 @@ struct Types: ParsableCommand {
     mutating func run() throws {
         let pasteboard = NSPasteboard(name: global.pasteboard.name)
         let items = pasteboard.pasteboardItems ?? []
-        let indent = String(repeating: " ", count: 8)
 
-        for (itemIndex, item) in items.enumerated() {
-            for (typeIndex, type) in item.types.enumerated() {
-                let prefix = typeIndex == 0
-                    ? String(format: "Item %-3d", itemIndex)
-                    : indent
-                let mime = type.mimeType.map { "(\($0))" } ?? ""
-                print("\(prefix) \(type.rawValue) \(mime)")
+        for (index, item) in items.enumerated() {
+            print("Item \(index)")
+
+            for type in item.types {
+                if let mime = type.mimeType {
+                    print("  \(type.rawValue) (\(mime))")
+                } else {
+                    print("  \(type.rawValue)")
+                }
             }
         }
     }
