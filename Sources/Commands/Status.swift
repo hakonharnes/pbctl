@@ -5,7 +5,9 @@ struct Status: ParsableCommand {
         abstract: "Display pasteboard status"
     )
 
+    @OptionGroup var globalOptions: GlobalOptions
+
     mutating func run() throws {
-        print("Status")
+        print("Status \(globalOptions.pasteboard)")
     }
 }

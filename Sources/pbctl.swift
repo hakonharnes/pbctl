@@ -20,21 +20,7 @@ struct Pbctl: ParsableCommand {
             Clear.self,
             Types.self,
             Status.self,
-        ]
+        ],
+        defaultSubcommand: isatty(STDIN_FILENO) != 0 ? Paste.self : Copy.self
     )
-
-    mutating func run() throws {
-        let stdinIsTTY = isatty(STDIN_FILENO) != 0
-        let stdoutIsTTY = isatty(STDOUT_FILENO) != 0
-
-        if stdinIsTTY && stdoutIsTTY {
-            throw CleanExit.helpRequest(self)
-        } else if !stdinIsTTY && stdoutIsTTY {
-            var copyCommand = Copy()
-            try copyCommand.run()
-        } else {
-            var pasteCommand = Paste()
-            try pasteCommand.run()
-        }
-    }
 }
