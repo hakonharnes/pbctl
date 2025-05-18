@@ -11,54 +11,60 @@ struct Paste: ParsableCommand {
     mutating func run() throws {
         let pasteboard = NSPasteboard(name: global.pasteboard.name)
 
-        if let typeInput = options.type {
-            let uti: String
-
-            if let utType = UTType(mimeType: typeInput) {
-                uti = utType.identifier
-            } else if let utType = UTType(typeInput) {
-                uti = utType.identifier
-            } else {
-                throw ValidationError("Invalid type: \(typeInput) is not a recognized MIME type or UTI.")
-            }
-
-            let pasteboardType = NSPasteboard.PasteboardType(uti)
-
+        /// If a type is specified, try to get the data for that type
+        /// exit immediately with an error if no data is found
+        if let type = options.type {
+            let pasteboardType = try getTypeFromArgument(type: type)
             guard let data = pasteboard.data(forType: pasteboardType) else {
-                throw ValidationError("No data found for type: \(typeInput). Available types: \(pasteboard.types ?? [])")
+                throw ValidationError("No data found for type \"\(type)\".")
             }
 
             try write(data: data)
             return
         }
 
+        /// If a file is specified, try to get the data for the file's type
         if let output = options.output {
-            let fileExtension = (output as NSString).pathExtension
-
-            if let utType = UTType(filenameExtension: fileExtension) {
-                let inferredType = NSPasteboard.PasteboardType(utType.identifier)
-
-                if let data = pasteboard.data(forType: inferredType) {
-                    try write(data: data)
-                    return
-                } else {
-                    fputs("Warning: No data for inferred type '\(utType.identifier)' (from '.\(fileExtension)'). Falling back.\n", stderr)
-                }
-            }
-        }
-
-        // Fallback to first matching pasteboard type
-        for type in pasteboard.types ?? [] {
-            if let data = pasteboard.data(forType: type) {
+            if let pasteboardType = try? getTypeFromFile(file: output),
+               let data = pasteboard.data(forType: pasteboardType)
+            {
                 try write(data: data)
                 return
             }
         }
 
+        /// If no type is specified, try to get the default type (first type in pasteboard or string)
+        let defaultType = pasteboard.types?.first ?? NSPasteboard.PasteboardType.string
+        if let data = pasteboard.data(forType: defaultType) {
+            try write(data: data)
+            return
+        }
+
         throw CleanExit.message("No data found in the pasteboard.")
     }
+}
 
-    private func write(data: Data) throws {
+private extension Paste {
+    func getTypeFromArgument(type: String) throws -> NSPasteboard.PasteboardType {
+        if let utType = UTType(mimeType: type), !utType.isDynamic {
+            return NSPasteboard.PasteboardType(utType.identifier)
+        } else if let utType = UTType(type), !utType.isDynamic {
+            return NSPasteboard.PasteboardType(utType.identifier)
+        }
+
+        throw ValidationError("\"\(type)\" is not a recognized MIME type or UTI.")
+    }
+
+    func getTypeFromFile(file: String) throws -> NSPasteboard.PasteboardType {
+        let fileExtension = URL(fileURLWithPath: file).pathExtension
+        if let utType = UTType(filenameExtension: fileExtension), !utType.isDynamic {
+            return NSPasteboard.PasteboardType(utType.identifier)
+        }
+
+        throw ValidationError("\(file) is not a recognized file extension.")
+    }
+
+    func write(data: Data) throws {
         if let output = options.output {
             try data.write(to: URL(fileURLWithPath: output))
         } else {
