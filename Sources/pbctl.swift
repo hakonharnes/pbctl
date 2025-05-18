@@ -27,7 +27,7 @@ struct Pbctl: ParsableCommand {
     )
 
     private static func getDefaultSubcommand() -> ParsableCommand.Type {
-        let args = CommandLine.arguments.dropFirst()
+        let args = CommandLine.normalizedArguments
         if args.contains("-o") || args.contains("--output") {
             return Paste.self
         } else if args.contains("-i") || args.contains("--input") {
