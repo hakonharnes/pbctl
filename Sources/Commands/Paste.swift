@@ -35,6 +35,7 @@ struct Paste: ParsableCommand {
 
         /// If no type is specified, try to get the default type (first type in pasteboard or string)
         let defaultType = pasteboard.types?.first ?? NSPasteboard.PasteboardType.string
+        print(defaultType)
         if let data = pasteboard.data(forType: defaultType) {
             try write(data: data)
             return
