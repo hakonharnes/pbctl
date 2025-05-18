@@ -1,9 +1,11 @@
 import ArgumentParser
 import Foundation
 
-let version = """
+private let year = Calendar.current.component(.year, from: Date())
+
+private let version = """
 pbctl 0.1.0
-Copyright (C) 2025 Håkon Harnes
+Copyright (C) \(year) Håkon Harnes
 License MIT <https://opensource.org/licenses/MIT>
 This is free software: you are free to change and redistribute it.
 There is NO WARRANTY, to the extent permitted by law.
