@@ -25,15 +25,15 @@ struct Pbctl: ParsableCommand {
         ],
         defaultSubcommand: getDefaultSubcommand()
     )
-}
 
-func getDefaultSubcommand() -> ParsableCommand.Type {
-    let args = CommandLine.arguments.dropFirst()
-    if args.contains("-o") || args.contains("--output") {
-        return Paste.self
-    } else if args.contains("-i") || args.contains("--input") {
-        return Copy.self
+    private static func getDefaultSubcommand() -> ParsableCommand.Type {
+        let args = CommandLine.arguments.dropFirst()
+        if args.contains("-o") || args.contains("--output") {
+            return Paste.self
+        } else if args.contains("-i") || args.contains("--input") {
+            return Copy.self
+        }
+
+        return isatty(STDIN_FILENO) != 0 ? Paste.self : Copy.self
     }
-
-    return isatty(STDIN_FILENO) != 0 ? Paste.self : Copy.self
 }

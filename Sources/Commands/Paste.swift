@@ -12,6 +12,10 @@ struct Paste: ParsableCommand {
 
         for type in pasteboard.types ?? [] {
             if let data = pasteboard.data(forType: type) {
+                if let output = options.output {
+                    try data.write(to: URL(fileURLWithPath: output))
+                    return
+                }
                 FileHandle.standardOutput.write(data)
                 return
             }
