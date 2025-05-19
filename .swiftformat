@@ -1,4 +1,4 @@
---swiftversion 6.1
+--swiftversion 6.0
 --disable unusedArguments
 --wraparguments beforefirst
 --wrapelements beforefirst
