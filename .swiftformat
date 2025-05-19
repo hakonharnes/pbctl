@@ -3,3 +3,4 @@
 --wraparguments beforefirst
 --wrapelements beforefirst
 --disable wrapMultilineStatementBraces
+--disable trailingCommas

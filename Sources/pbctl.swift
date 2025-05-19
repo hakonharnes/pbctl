@@ -23,7 +23,7 @@ struct Pbctl: ParsableCommand {
             Types.self,
             Status.self,
         ],
-        defaultSubcommand: getDefaultSubcommand(),
+        defaultSubcommand: getDefaultSubcommand()
     )
 
     private static func getDefaultSubcommand() -> ParsableCommand.Type {
