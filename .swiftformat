@@ -1,4 +1,5 @@
+--swiftversion 6.1
 --disable unusedArguments
 --wraparguments beforefirst
 --wrapelements beforefirst
---allman false
+--disable wrapMultilineStatementBraces

@@ -26,8 +26,7 @@ struct Paste: ParsableCommand {
         /// If a file is specified, try to get the data for the file's type
         if let output = options.output {
             if let pasteboardType = try? getTypeFromFile(file: output),
-               let data = pasteboard.data(forType: pasteboardType)
-            {
+               let data = pasteboard.data(forType: pasteboardType) {
                 try write(data: data)
                 return
             }
