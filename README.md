@@ -1,4 +1,4 @@
-# Pasteboard control
+# pbctl
 
 Command-line interface to the MacOS pasteboard.
 
