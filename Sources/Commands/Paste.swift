@@ -5,8 +5,8 @@ import UniformTypeIdentifiers
 struct Paste: ParsableCommand {
     static let configuration = CommandConfiguration(abstract: "Paste data from the pasteboard.")
 
-    @OptionGroup var global: GlobalOptions
     @OptionGroup var options: PasteOptions
+    @OptionGroup var global: GlobalOptions
 
     mutating func run() throws {
         let pasteboard = NSPasteboard(name: global.pasteboard.name)
