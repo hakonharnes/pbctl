@@ -14,7 +14,7 @@ There is NO WARRANTY, to the extent permitted by law.
 @main
 struct Pbctl: ParsableCommand {
     static let configuration = CommandConfiguration(
-        abstract: "Command-line interface to the MacOS pasteboard.",
+        abstract: "Command-line interface to the MacOS pasteboard (clipboard).",
         version: version,
         subcommands: [
             Paste.self,
@@ -23,7 +23,7 @@ struct Pbctl: ParsableCommand {
             Types.self,
             Status.self,
         ],
-        defaultSubcommand: getDefaultSubcommand()
+        defaultSubcommand: getDefaultSubcommand(),
     )
 
     private static func getDefaultSubcommand() -> ParsableCommand.Type {
