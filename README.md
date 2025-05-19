@@ -19,6 +19,12 @@ Command-line interface to the MacOS pasteboard. A modern replacement for `pbcopy
 
 ## Installation
 
+### Homebrew
+
+```sh
+brew install hakonharnes/tap/pbctl
+```
+
 ### Build from source
 
 ```sh
