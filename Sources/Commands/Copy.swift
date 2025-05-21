@@ -1,5 +1,6 @@
 import AppKit
 import ArgumentParser
+import Foundation
 import MagicWrapper
 import UniformTypeIdentifiers
 
@@ -12,11 +13,23 @@ struct Copy: ParsableCommand {
     @OptionGroup var global: GlobalOptions
 
     mutating func run() throws {
-        let data = try getData()
-        var pasteboardType = try getPasteboardType(forData: data)
-
         let pasteboard = NSPasteboard(name: global.pasteboard.name)
         pasteboard.clearContents()
+
+        if options.reference {
+            guard let inputPath = options.input else {
+                throw ValidationError("--reference (-r) requires an --input file path.")
+            }
+
+            let url = URL(fileURLWithPath: inputPath).absoluteURL
+            if !pasteboard.setString(url.absoluteString, forType: .fileURL) {
+                throw ValidationError("Failed to copy file reference to the pasteboard.")
+            }
+            return
+        }
+
+        let data = try getData()
+        var pasteboardType = try getPasteboardType(forData: data)
 
         if pasteboardType.rawValue.contains("plain-text") {
             pasteboardType = NSPasteboard.PasteboardType.string
@@ -29,9 +42,9 @@ struct Copy: ParsableCommand {
 
     private func getData() throws -> Data {
         if let input = options.input {
-            return try Data(contentsOf: URL(fileURLWithPath: input))
+            try Data(contentsOf: URL(fileURLWithPath: input))
         } else {
-            return FileHandle.standardInput.readDataToEndOfFile()
+            FileHandle.standardInput.readDataToEndOfFile()
         }
     }
 

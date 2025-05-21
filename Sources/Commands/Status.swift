@@ -3,7 +3,9 @@ import ArgumentParser
 import Foundation
 
 struct Status: ParsableCommand {
-    static let configuration = CommandConfiguration(abstract: "Display current pasteboard status.")
+    static let configuration = CommandConfiguration(
+        abstract: "Display current pasteboard status."
+    )
 
     @OptionGroup var global: GlobalOptions
 
@@ -14,18 +16,19 @@ struct Status: ParsableCommand {
 
         let totalBytes = items.reduce(0) { running, item in
             running + item.types.reduce(0) { inner, type in
-                inner + (item.data(forType: type)?.count ?? 0)
+                let count = (try? pasteboard
+                    .getData(forType: type, followFileURLs: true)?.count) ?? 0
+                return inner + count
             }
         }
 
-        let formatter = ByteCountFormatter()
-        formatter.countStyle = .binary
+        let fmt = ByteCountFormatter(); fmt.countStyle = .binary
 
         print("Pasteboard  : \(global.pasteboard)")
         print("Change #    : \(changeCount)")
         print("Items       : \(items.count)")
         if totalBytes > 0 {
-            print("Size        : \(formatter.string(fromByteCount: Int64(totalBytes)))")
+            print("Size        : \(fmt.string(fromByteCount: Int64(totalBytes)))")
         }
     }
 }
