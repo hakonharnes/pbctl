@@ -73,7 +73,10 @@ private extension Paste {
     func write(data: Data, type: NSPasteboard.PasteboardType) throws {
         if let output = options.output {
             try data.write(to: URL(fileURLWithPath: output))
-            return
+
+            if !options.stdout {
+                return
+            }
         }
 
         if options.stdout || isatty(STDOUT_FILENO) == 0 || type.isTextType {
