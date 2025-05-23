@@ -38,6 +38,10 @@ struct Copy: ParsableCommand {
         if !pasteboard.setData(data, forType: pasteboardType) {
             throw ValidationError("Failed to copy data to the pasteboard.")
         }
+
+        if options.stdout || isatty(STDOUT_FILENO) == 0 {
+            FileHandle.standardOutput.write(data)
+        }
     }
 
     private func getData() throws -> Data {

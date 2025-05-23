@@ -9,4 +9,7 @@ struct CopyOptions: ParsableArguments {
 
     @Flag(name: .shortAndLong, help: "Copy file reference instead of contents.")
     var reference: Bool = false
+
+    @Flag(name: .long, inversion: .prefixedNo, help: "Output copied data to stdout (automatic when output is piped).")
+    var stdout: Bool = false
 }
