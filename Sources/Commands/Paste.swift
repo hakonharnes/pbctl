@@ -38,13 +38,14 @@ struct Paste: ParsableCommand {
             }
         }
 
-        let defaultType = pasteboard.types?.first ?? NSPasteboard.PasteboardType.string
-        if let data = try pasteboard.getData(
-            forType: defaultType,
-            followFileURLs: followFileURLs
-        ) {
-            try write(data: data)
-            return
+        for type in pasteboard.types ?? [] {
+            if let data = try pasteboard.getData(
+                forType: type,
+                followFileURLs: followFileURLs
+            ) {
+                try write(data: data)
+                return
+            }
         }
 
         throw CleanExit.message("No data found in the pasteboard.")
