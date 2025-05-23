@@ -29,13 +29,14 @@ struct Copy: ParsableCommand {
         }
 
         let data = try getData()
-        var pasteboardType = try getPasteboardType(forData: data)
+        let types = try getPasteboardTypes(forData: data)
 
-        if pasteboardType.rawValue.contains("plain-text") {
-            pasteboardType = NSPasteboard.PasteboardType.string
+        var success = false
+        for type in types where pasteboard.setData(data, forType: type) {
+            success = true
         }
 
-        if !pasteboard.setData(data, forType: pasteboardType) {
+        if !success {
             throw ValidationError("Failed to copy data to the pasteboard.")
         }
 
@@ -52,10 +53,12 @@ struct Copy: ParsableCommand {
         }
     }
 
-    private func getPasteboardType(forData data: Data) throws -> NSPasteboard.PasteboardType {
+    private func getPasteboardTypes(forData data: Data) throws -> [NSPasteboard.PasteboardType] {
         if let type = options.type {
-            return try getTypeFromArgument(type: type)
+            return try [getTypeFromArgument(type: type)]
         }
+
+        var types: [NSPasteboard.PasteboardType] = []
 
         let mime: String
         do {
@@ -65,14 +68,17 @@ struct Copy: ParsableCommand {
         }
 
         if mime.starts(with: "text/") {
-            return NSPasteboard.PasteboardType.string
+            if let uti = UTType(mimeType: mime), !uti.isDynamic {
+                types.append(NSPasteboard.PasteboardType(uti.identifier))
+            }
+            types.append(.string)
+        } else if let uti = UTType(mimeType: mime), !uti.isDynamic {
+            types.append(NSPasteboard.PasteboardType(uti.identifier))
+        } else {
+            types.append(NSPasteboard.PasteboardType("public.data"))
         }
 
-        if let uti = UTType(mimeType: mime), !uti.isDynamic {
-            return NSPasteboard.PasteboardType(uti.identifier)
-        }
-
-        return NSPasteboard.PasteboardType("public.data")
+        return types
     }
 
     private func getTypeFromArgument(type: String) throws -> NSPasteboard.PasteboardType {
