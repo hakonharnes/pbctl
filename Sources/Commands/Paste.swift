@@ -23,7 +23,7 @@ struct Paste: ParsableCommand {
             ) else {
                 throw ValidationError("No data found for type \"\(explicit)\".")
             }
-            try write(data: data)
+            try write(data: data, type: pasteboardType)
             return
         }
 
@@ -33,7 +33,7 @@ struct Paste: ParsableCommand {
                    forType: pasteboardType,
                    followFileURLs: followFileURLs
                ) {
-                try write(data: data)
+                try write(data: data, type: pasteboardType)
                 return
             }
         }
@@ -43,7 +43,7 @@ struct Paste: ParsableCommand {
                 forType: type,
                 followFileURLs: followFileURLs
             ) {
-                try write(data: data)
+                try write(data: data, type: type)
                 return
             }
         }
@@ -70,11 +70,17 @@ private extension Paste {
         throw ValidationError("\(file) is not a recognized file extension.")
     }
 
-    func write(data: Data) throws {
+    func write(data: Data, type: NSPasteboard.PasteboardType) throws {
         if let output = options.output {
             try data.write(to: URL(fileURLWithPath: output))
-        } else {
-            FileHandle.standardOutput.write(data)
+            return
         }
+
+        if options.stdout || isatty(STDOUT_FILENO) == 0 || type.rawValue.contains("text") {
+            FileHandle.standardOutput.write(data)
+            return
+        }
+
+        throw CleanExit.message("Binary data detected. Use --stdout to output to terminal or -o to save to file.")
     }
 }

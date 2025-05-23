@@ -9,4 +9,7 @@ struct PasteOptions: ParsableArguments {
 
     @Flag(name: .shortAndLong, help: "Do not resolve file-urls; paste the reference.")
     var reference: Bool = false
+
+    @Flag(name: .long, inversion: .prefixedNo, help: "Force output to stdout (automatic for text or when piped).")
+    var stdout: Bool = false
 }
