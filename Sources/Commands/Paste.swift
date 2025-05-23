@@ -76,7 +76,7 @@ private extension Paste {
             return
         }
 
-        if options.stdout || isatty(STDOUT_FILENO) == 0 || type.rawValue.contains("text") {
+        if options.stdout || isatty(STDOUT_FILENO) == 0 || type.isTextType {
             FileHandle.standardOutput.write(data)
             return
         }

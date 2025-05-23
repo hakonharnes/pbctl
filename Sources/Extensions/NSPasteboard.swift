@@ -1,5 +1,6 @@
 import AppKit
 import Foundation
+import UniformTypeIdentifiers
 
 extension NSPasteboard {
     /// Returns pasteboard data for `type`.
@@ -23,5 +24,25 @@ extension NSPasteboard {
             ?? URL(fileURLWithPath: urlString)
 
         return try Data(contentsOf: url)
+    }
+}
+
+extension NSPasteboard.PasteboardType {
+    var isTextType: Bool {
+        guard let utType = UTType(rawValue) else {
+            return false
+        }
+
+        return utType.conforms(to: .text) ||
+            utType.conforms(to: .plainText) ||
+            utType.conforms(to: .utf8PlainText) ||
+            utType.conforms(to: .utf16PlainText) ||
+            utType.conforms(to: .utf16ExternalPlainText) ||
+            utType.conforms(to: .rtf) ||
+            utType.conforms(to: .rtfd) ||
+            utType.conforms(to: .html) ||
+            utType.conforms(to: .xml) ||
+            utType.conforms(to: .sourceCode) ||
+            utType.conforms(to: .script)
     }
 }
