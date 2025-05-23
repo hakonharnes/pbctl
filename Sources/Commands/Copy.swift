@@ -60,8 +60,15 @@ struct Copy: ParsableCommand {
             mime = "application/octet-stream"
         }
 
-        let uti = UTType(mimeType: mime)?.identifier ?? "com.pbctl.binary"
-        return NSPasteboard.PasteboardType(uti)
+        if mime.starts(with: "text/") {
+            return NSPasteboard.PasteboardType.string
+        }
+
+        if let uti = UTType(mimeType: mime), !uti.isDynamic {
+            return NSPasteboard.PasteboardType(uti.identifier)
+        }
+
+        return NSPasteboard.PasteboardType("public.data")
     }
 
     private func getTypeFromArgument(type: String) throws -> NSPasteboard.PasteboardType {
