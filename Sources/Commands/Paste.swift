@@ -15,13 +15,13 @@ struct Paste: ParsableCommand {
         let pasteboard = NSPasteboard(name: global.pasteboard.name)
         let followFileURLs = !options.reference
 
-        if let explicit = options.type {
-            let pasteboardType = try getTypeFromArgument(type: explicit)
+        if let type = options.type {
+            let pasteboardType = try getTypeFromArgument(type: type)
             guard let data = try pasteboard.getData(
                 forType: pasteboardType,
                 followFileURLs: followFileURLs
             ) else {
-                throw ValidationError("No data found for type \"\(explicit)\".")
+                throw ValidationError("No data found for type \"\(type)\".")
             }
             try write(data: data, type: pasteboardType)
             return
@@ -55,10 +55,12 @@ struct Paste: ParsableCommand {
 private extension Paste {
     func getTypeFromArgument(type: String) throws -> NSPasteboard.PasteboardType {
         if let genericType = NSPasteboard.PasteboardType.GenericType(rawValue: type.lowercased()) {
+            print(genericType)
             let pasteboard = NSPasteboard(name: global.pasteboard.name)
             let availableTypes = pasteboard.types ?? []
 
             if let matchingType = NSPasteboard.PasteboardType.findMatching(genericType: genericType, in: availableTypes) {
+                print(matchingType)
                 return matchingType
             }
 

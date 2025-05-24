@@ -12,7 +12,7 @@ extension NSPasteboard.PasteboardType {
         case rtf
         case pdf
 
-        var defaultPasteboardType: NSPasteboard.PasteboardType {
+        var type: NSPasteboard.PasteboardType {
             switch self {
             case .text:
                 .string
@@ -62,7 +62,7 @@ extension NSPasteboard.PasteboardType {
     static func from(typeString: String) throws -> NSPasteboard.PasteboardType {
         // Try to parse as generic type
         if let genericType = GenericType(rawValue: typeString.lowercased()) {
-            return genericType.defaultPasteboardType
+            return genericType.type
         }
 
         // Try to parse as MIME type
@@ -82,4 +82,3 @@ extension NSPasteboard.PasteboardType {
         availableTypes.first { genericType.matches($0) }
     }
 }
-
