@@ -4,7 +4,7 @@ import Foundation
 private let year = Calendar.current.component(.year, from: Date())
 
 private let version = """
-pbctl 0.4.6
+pbctl 0.4.7
 Copyright (C) \(year) Håkon Harnes
 License MIT <https://opensource.org/licenses/MIT>
 This is free software: you are free to change and redistribute it.
