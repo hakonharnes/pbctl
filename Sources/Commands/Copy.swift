@@ -86,12 +86,6 @@ struct Copy: ParsableCommand {
     }
 
     private func getTypeFromArgument(type: String) throws -> NSPasteboard.PasteboardType {
-        if let utType = UTType(mimeType: type), !utType.isDynamic {
-            return NSPasteboard.PasteboardType(utType.identifier)
-        } else if let utType = UTType(type), !utType.isDynamic {
-            return NSPasteboard.PasteboardType(utType.identifier)
-        }
-
-        throw ValidationError("\"\(type)\" is not a recognized MIME type or UTI.")
+        try NSPasteboard.PasteboardType.from(typeString: type)
     }
 }

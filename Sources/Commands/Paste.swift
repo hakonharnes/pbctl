@@ -54,12 +54,18 @@ struct Paste: ParsableCommand {
 
 private extension Paste {
     func getTypeFromArgument(type: String) throws -> NSPasteboard.PasteboardType {
-        if let utType = UTType(mimeType: type), !utType.isDynamic {
-            return NSPasteboard.PasteboardType(utType.identifier)
-        } else if let utType = UTType(type), !utType.isDynamic {
-            return NSPasteboard.PasteboardType(utType.identifier)
+        if let genericType = NSPasteboard.PasteboardType.GenericType(rawValue: type.lowercased()) {
+            let pasteboard = NSPasteboard(name: global.pasteboard.name)
+            let availableTypes = pasteboard.types ?? []
+
+            if let matchingType = NSPasteboard.PasteboardType.findMatching(genericType: genericType, in: availableTypes) {
+                return matchingType
+            }
+
+            throw ValidationError("No data found matching generic type \"\(type)\".")
         }
-        throw ValidationError("\"\(type)\" is not a recognized MIME type or UTI.")
+
+        return try NSPasteboard.PasteboardType.from(typeString: type)
     }
 
     func getTypeFromFile(file: String) throws -> NSPasteboard.PasteboardType {
