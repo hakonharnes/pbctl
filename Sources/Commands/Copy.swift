@@ -13,6 +13,10 @@ struct Copy: ParsableCommand {
     @OptionGroup var global: GlobalOptions
 
     mutating func run() throws {
+        if isatty(STDIN_FILENO) != 0 && options.input == nil {
+            throw ValidationError("No input provided. Use --input (-i) to specify a file or pipe data through stdin.")
+        }
+
         let pasteboard = NSPasteboard(name: global.pasteboard.name)
         pasteboard.clearContents()
 
